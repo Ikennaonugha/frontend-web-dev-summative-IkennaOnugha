@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Life Planner Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="top-nav-container" role="navigation" aria-label="Main Campus Planner Navigation">
+        <a href="index.html" class="app-logo">Campus Planner</a>
+        
+        <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle Light and Dark Mode">
+            ☀️/🌙
+        </button>
+        <button id="menu-toggle-btn" class="hamburger-btn" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="main-nav">
+            <span class="line"></span>
+            <span class="line"></span>
+            <span class="line"></span>
+        </button>
+        
+        <ul id="main-nav" class="nav-menu" role="menu">
+            <li role="menuitem"><a href="index.html" class="nav-link active">Dashboard</a></li>
+            <li role="menuitem"><a href="todo.html" class="nav-link">To-Do List</a></li>
+            <li role="menuitem"><a href="calendar.html" class="nav-link">Calendar</a></li>
+            <li role="menuitem"><a href="about.html" class="nav-link">About</a></li>
+        </ul>
+    </nav>
+
+    <div class="dashboard-container">
+        
+        <header style="text-align: center; margin-bottom: 2rem;">
+            <h1>Campus Dashboard</h1>
+            <p style="color: var(--color-gray-dark);">A minimalist overview of your academic week.</p>
+        </header>
+
+        <main class="dashboard-grid">
+            
+            <section class="card metric-card" role="region" aria-labelledby="metric-total-tasks-label">
+                <h2 id="metric-total-tasks-label">Total Tasks</h2>
+                <div id="metric-total-tasks" class="metric-value">0</div>
+                <p class="metric-label">All Tasks Logged</p>
+                <p class="metric-subtext">Includes completed and pending items.</p>
+            </section>
+            
+            
+            <section class="card metric-card" role="region" aria-labelledby="metric-completed-tasks-label">
+                <h2 id="metric-completed-tasks-label">Completed</h2>
+                <div id="metric-completed-tasks" class="metric-value">0</div>
+                <p class="metric-label">Tasks Finished</p>
+                <p class="metric-subtext">Great job so far this semester!</p>
+            </section>
+            
+            
+            <section class="card metric-card" role="region" aria-labelledby="metric-completion-rate-label">
+                <h2 id="metric-completion-rate-label">Rate</h2>
+                <div id="metric-completion-rate" class="metric-value">0%</div>
+                <p class="metric-label">Completion Rate</p>
+                <p class="metric-subtext">Overall progress efficiency.</p>
+            </section>
+
+            
+            <section class="card metric-card" role="region" aria-labelledby="metric-pending-duration-label">
+                <h2 id="metric-pending-duration-label">Pending Time</h2>
+                <div id="metric-pending-duration" class="metric-value">0h 0m</div>
+                <p class="metric-label">Estimated Time Remaining</p>
+                <p class="metric-subtext">Sum of time for incomplete tasks.</p>
+            </section>
+            
+            
+            <section class="card metric-card" role="region" aria-labelledby="metric-pomodoro-total-label">
+                <h2 id="metric-pomodoro-total-label">Focus Total</h2>
+                <div id="metric-pomodoro-total" class="metric-value">0h 0m</div>
+                <p class="metric-label">Pomodoro Time Logged</p>
+                <p class="metric-subtext">Total time spent in focus sessions.</p>
+            </section>
+
+            
+            <section class="card pomodoro-clock" style="grid-column: 1 / -1;" role="timer" aria-live="assertive" aria-atomic="true">
+                <h2 style="border: none;">Pomodoro Focus Clock</h2>
+                
+                <div id="timer-status" aria-live="polite">Ready to Focus</div>
+
+                <div id="timer-display" aria-label="Timer display">25:00</div>
+                
+                <div class="pomodoro-controls">
+                    <button id="start-btn" class="button button-start" aria-label="Start or Resume Timer">Start</button>
+                    <button id="pause-btn" class="button button-pause" disabled aria-label="Pause Timer">Pause</button>
+                    <button id="reset-btn" class="button button-reset" aria-label="Reset Timer">Reset</button>
+                </div>
+                <p class="metric-subtext">Focus: 25 min | Break: 5 min</p>
+            </section>
+            
+            
+            <section class="card tasks-section" style="grid-column: 1 / -1;" role="region" aria-labelledby="upcoming-tasks-title">
+                <h2 id="upcoming-tasks-title">Upcoming Tasks</h2>
+                <ul id="upcoming-tasks-list" class="tasks-list" role="list" aria-live="polite">
+                    <li style="text-align: center; color: var(--color-gray-medium); padding: 1rem 0;">No pending tasks.</li>
+                </ul>
+                <p class="metric-subtext" style="text-align: right; margin-top: 1rem;">Showing next 3 pending tasks.</p>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

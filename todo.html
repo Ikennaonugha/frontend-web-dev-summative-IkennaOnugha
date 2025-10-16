@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus To-Do List</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Include the Inter font via CDN in the HTML for use in style.css -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="top-nav-container" role="navigation" aria-label="Main Campus Planner Navigation">
+        <a href="index.html" class="app-logo">Campus Planner</a>
+        <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle Light and Dark Mode">
+            ☀️/🌙
+        </button>
+        <button id="menu-toggle-btn" class="hamburger-btn" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="main-nav">
+            <span class="line"></span>
+            <span class="line"></span>
+            <span class="line"></span>
+
+        </button>
+        
+        <ul id="main-nav" class="nav-menu" role="menu">
+            <li role="menuitem"><a href="index.html" class="nav-link">Dashboard</a></li>
+            <li role="menuitem"><a href="todo.html" class="nav-link active">To-Do List</a></li>
+            <li role="menuitem"><a href="calendar.html" class="nav-link">Calendar</a></li>
+            <li role="menuitem"><a href="about.html" class="nav-link">About</a></li>
+        </ul>
+    </nav>
+
+    <div class="todo-container">
+        <header style="text-align: center; margin: 2rem 0;">
+            <h1>Manage Your Tasks</h1>
+            <p style="color: var(--color-gray-dark);">Add, track, and complete your academic and personal tasks.</p>
+        </header>
+
+        <!-- Task Input Form -->
+        <section class="card task-form-card" role="form" aria-labelledby="add-task-title">
+            <h2 id="add-task-title" style="border-color: var(--color-black);">Add New Task</h2>
+            <form id="task-form">
+                <div class="form-row">
+                    <!-- Title -->
+                    <div class="form-field" style="flex-basis: 100%;">
+                        <label for="task-title">Task Title</label>
+                        <input type="text" id="task-title" required placeholder="E.g., Finalize Math Project">
+                        <p id="title-error" class="error-message"></p>
+                    </div>
+
+                    <!-- Due Date -->
+                    <div class="form-field">
+                        <label for="task-date">Due Date</label>
+                        <input type="date" id="task-date" required>
+                        <p id="date-error" class="error-message"></p>
+                    </div>
+
+                    <!-- Duration -->
+                    <div class="form-field">
+                        <label for="task-duration">Duration (min)</label>
+                        <input type="number" id="task-duration" min="1" required value="60">
+                        <p id="duration-error" class="error-message"></p>
+                    </div>
+
+                    <!-- Tag -->
+                    <div class="form-field">
+                        <label for="task-tag">Category/Tag</label>
+                        <select id="task-tag" required>
+                            <option value="Academic">Academic</option>
+                            <option value="Programming">Programming</option>
+                            <option value="Chemistry">Chemistry</option>
+                            <option value="Literature">Literature</option>
+                            <option value="Admin">Admin</option>
+                            <option value="Leisure">Leisure</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="margin-top: 1.5rem;">
+                    <button type="submit" class="button">Save Task</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Task List Filters and Sort -->
+        <section class="card todo-list-section" role="region" aria-labelledby="task-list-title">
+            <h2 id="task-list-title">Task List</h2>
+
+            <div class="filter-sort-row">
+                <div>
+                    <label for="filter-status">Status:</label>
+                    <select id="filter-status">
+                        <option value="all">All</option>
+                        <option value="pending">Pending</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="sort-by">Sort By:</label>
+                    <select id="sort-by">
+                        <option value="dueDate">Due Date</option>
+                        <option value="createdAt">Creation Date</option>
+                        <option value="duration">Duration</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- The To-Do List -->
+            <ul id="todo-list" role="list">
+                <!-- Task items will be inserted here by JavaScript -->
+            </ul>
+
+            <!-- Utility Buttons -->
+            <div class="utility-buttons">
+                <input type="file" id="import-file" accept=".json" style="display: none;">
+                <button type="button" class="button" onclick="document.getElementById('import-file').click();">Import Tasks</button>
+                <button id="export-btn" class="button" type="button">Export Tasks</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Initialization Script (must be here for task events) -->
+    <script>
+        // Make sure to load the tasks and render the list on the To-Do page
+        // Note: Validation functions are in script.js now, accessible after it loads
+        
+        // --- TO-DO LIST SPECIFIC LOGIC (Requires functions to be defined globally in script.js) ---
+        // For a complete app, you would add renderTodoList, handleAddTask, handleExport, handleImport
+        // and other todo-specific functions into script.js.
+        // I will trust the original application intended to have those functions available globally.
+        
+        window.onload = function() {
+            // Check if we are on the To-Do page before rendering the list
+            if (document.getElementById('todo-list')) {
+                loadTasks();
+                // Assuming renderTodoList, handleAddTask, etc., are available globally
+                if (typeof renderTodoList === 'function') renderTodoList();
+                if (typeof handleAddTask === 'function') document.getElementById('task-form').addEventListener('submit', handleAddTask);
+                if (typeof renderTodoList === 'function') document.getElementById('filter-status').addEventListener('change', renderTodoList);
+                if (typeof renderTodoList === 'function') document.getElementById('sort-by').addEventListener('change', renderTodoList);
+                if (typeof handleExport === 'function') document.getElementById('export-btn').addEventListener('click', handleExport);
+                if (typeof handleImport === 'function') document.getElementById('import-file').addEventListener('change', handleImport);
+                
+                // Add validation listeners (defined in script.js)
+                if (typeof validateTitle === 'function') {
+                    document.getElementById('task-title').addEventListener('input', (e) => {
+                        const { error } = validateTitle(e.target.value);
+                        document.getElementById('title-error').textContent = error;
+                    });
+                }
+                if (typeof validateDuration === 'function') {
+                    document.getElementById('task-duration').addEventListener('input', (e) => {
+                        const { error } = validateDuration(e.target.value);
+                        document.getElementById('duration-error').textContent = error;
+                    });
+                }
+                if (typeof validateDate === 'function') {
+                     document.getElementById('task-date').addEventListener('input', (e) => {
+                        const { error } = validateDate(e.target.value);
+                        document.getElementById('date-error').textContent = error;
+                    });
+                }
+            }
+            // Navigation toggle is globally attached in script.js
+        };
+    </script>
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Campus Life Planner</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="top-nav-container" role="navigation" aria-label="Main Campus Planner Navigation">
+        <a href="index.html" class="app-logo">CAMPUS PLANNER</a>
+        <button id="menu-toggle-btn" class="hamburger-btn" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="main-nav">
+            <span class="line"></span>
+            <span class="line"></span>
+            <span class="line"></span>
+        </button>
+
+        <ul id="main-nav" class="nav-menu" role="menu">
+            <li role="menuitem"><a href="index.html" class="nav-link">Dashboard</a></li>
+            <li role="menuitem"><a href="todo.html" class="nav-link">To-Do List</a></li>
+            <li role="menuitem"><a href="calendar.html" class="nav-link">Calendar</a></li>
+            <li role="menuitem"><a href="about.html" class="nav-link active">About</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="about-container">
+        <header class="header-content">
+            <h1>About Campus Planner</h1>
+            <p style="color: var(--color-text-medium);">Your essential tool for organizing university life.</p>
+        </header>
+
+        <section class="card" role="article" aria-labelledby="mission-title">
+            <h2 id="mission-title">Our Mission</h2>
+            <p>Campus Planner was designed by students, for students. Our goal is to consolidate the essential tasks of university life—managing studies, tracking assignments, and maintaining focus—into a single, intuitive platform. We believe that better organization leads to less stress and better academic performance.</p>
+
+            <h2 id="features-title">Core Features</h2>
+            <ul>
+                <li><strong>Task Management:</strong> Easily add, categorize, and track due dates for all your assignments and responsibilities.</li>
+                <li><strong>Pomodoro Timer:</strong> Utilize the integrated focus clock to apply the Pomodoro Technique, improving concentration during study sessions.</li>
+                <li><strong>Calendar View:</strong> Visualize your deadlines monthly to prevent scheduling conflicts and stay ahead of the curve.</li>
+                <li><strong>Responsive Design:</strong> Access your planner seamlessly on any device, from your desktop to your phone.</li>
+            </ul>
+        </section>
+
+        <section class="card" role="article" aria-labelledby="tech-title">
+            <h2 id="tech-title">Technology Stack</h2>
+            <p>This application is built with core web technologies to ensure speed, stability, and broad compatibility:</p>
+            <ul>
+                <li><strong>HTML5:</strong> For semantic structure and content.</li>
+                <li><strong>Pure CSS:</strong> For all styling, ensuring fast loading and customization.</li>
+                <li><strong>Vanilla JavaScript:</strong> For all interactive logic, including task management and the Pomodoro timer functionality.</li>
+            </ul>
+        </section>
+
+        <footer class="footer-content">
+            <p>&copy; 2025 Campus Planner. All rights reserved. <br> Built to help you thrive in your academic journey.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- Hamburger Menu Logic (Pure JS) ---
+        const navToggleBtn = document.getElementById('menu-toggle-btn');
+        const mainNav = document.getElementById('main-nav');
+        const body = document.body;
+
+        function toggleNav() {
+            const isExpanded = navToggleBtn.getAttribute('aria-expanded') === 'true' || false;
+            // Toggle ARIA attributes for accessibility
+            navToggleBtn.setAttribute('aria-expanded', !isExpanded);
+
+            // Toggle classes for visual effect and body scroll lock
+            mainNav.classList.toggle('is-open');
+            body.classList.toggle('no-scroll');
+        }
+
+        navToggleBtn.addEventListener('click', toggleNav);
+    </script>
+</body>
+
+</html>

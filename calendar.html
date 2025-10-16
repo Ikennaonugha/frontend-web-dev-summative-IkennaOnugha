@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Task Calendar</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+        <nav class="top-nav-container" role="navigation" aria-label="Main Campus Planner Navigation">
+        <a href="index.html" class="app-logo">Campus Planner</a>
+        <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle Light and Dark Mode">
+            ☀️/🌙
+        </button>
+        <button id="menu-toggle-btn" class="hamburger-btn" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="main-nav">
+            <span class="line"></span>
+            <span class="line"></span>
+            <span class="line"></span>
+        </button>
+        
+        <ul id="main-nav" class="nav-menu" role="menu">
+            <li role="menuitem"><a href="index.html" class="nav-link">Dashboard</a></li>
+            <li role="menuitem"><a href="todo.html" class="nav-link">To-Do List</a></li>
+            <li role="menuitem"><a href="calendar.html" class="nav-link active">Calendar</a></li>
+            <li role="menuitem"><a href="about.html" class="nav-link active">About</a></li>
+        </ul>
+    </nav>
+
+    <div class="calendar-container">
+        <header style="text-align: center; margin: 2rem 0;">
+            <h1>Monthly Task Overview</h1>
+            <p style="color: var(--color-gray-dark);">See all your pending tasks visually organized by due date.</p>
+        </header>
+
+                <div class="card calendar-card" role="region" aria-labelledby="current-month-display">
+            <div class="calendar-header">
+                <button id="prev-month" class="button" aria-label="Previous Month">&lt;</button>
+                <h2 id="current-month-display" class="month-year-display">October 2025</h2>
+                <button id="next-month" class="button" aria-label="Next Month">&gt;</button>
+            </div>
+
+                        <div class="calendar-grid">
+                                <div class="weekday-header">Sun</div>
+                <div class="weekday-header">Mon</div>
+                <div class="weekday-header">Tue</div>
+                <div class="weekday-header">Wed</div>
+                <div class="weekday-header">Thu</div>
+                <div class="weekday-header">Fri</div>
+                <div class="weekday-header">Sat</div>
+                
+                            </div>
+        </div>
+
+                <section class="card task-list-container" role="region" aria-labelledby="selected-day-tasks-title">
+            <h3 id="selected-day-tasks-title">Tasks for: <span id="selected-date-display">Today</span></h3>
+            <ul id="tasks-for-day" role="list">
+                <li style="text-align: center; color: var(--color-gray-medium); padding: 1rem 0;">Select a date on the calendar to see tasks.</li>
+            </ul>
+        </section>
+    </div>
+
+        <script src="script.js"></script>
+
+        <script>
+        // NOTE: Ensure loadTasks() is called in script.js and populates window.tasks
+        
+        let today = new Date();
+        let currentMonth; 
+        let currentYear;
+
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        
+        function getTaskCountForDay(year, month, day) {
+            // Access the global tasks array
+            const globalTasks = window.tasks || [];
+            // Note: month is 0-indexed, so we use month + 1
+            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            return globalTasks.filter(t => !t.isCompleted && t.dueDate === dateStr).length;
+        }
+        
+        function renderCalendar() {
+            const dateDisplay = document.getElementById('current-month-display');
+            const grid = document.querySelector('.calendar-grid');
+            const firstDay = new Date(currentYear, currentMonth, 1);
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const startDay = firstDay.getDay(); // 0 (Sun) to 6 (Sat)
+            
+            dateDisplay.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+            
+            // Clear previous days (keep weekday headers which are the first 7 children)
+            while (grid.children.length > 7) {
+                grid.removeChild(grid.lastChild);
+            }
+
+            // Fill empty cells at the start (Previous Month Dates)
+            // NOTE: I've removed the calculation for prevMonthDate to keep it simple, 
+            // as showing previous month's dates is mostly for visual padding.
+            for (let i = 0; i < startDay; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'day-cell other-month';
+                // You can put a date here if you want:
+                // const prevMonthDate = new Date(currentYear, currentMonth, 0).getDate() - startDay + i + 1;
+                // emptyCell.innerHTML = `<span class="day-number">${prevMonthDate}</span>`;
+                grid.appendChild(emptyCell);
+            }
+
+            // Fill actual days
+            for (let day = 1; day <= daysInMonth; day++) {
+                const cell = document.createElement('div');
+                // Correct date string generation for filtering tasks
+                const dateString = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                
+                cell.className = 'day-cell';
+                cell.setAttribute('data-date', dateString);
+                cell.setAttribute('role', 'gridcell');
+
+                const taskCount = getTaskCountForDay(currentYear, currentMonth, day);
+
+                // Add today highlight (The original logic for `today` comparison was correct)
+                const checkDate = new Date(currentYear, currentMonth, day).setHours(0, 0, 0, 0);
+                if (checkDate === today.setHours(0, 0, 0, 0)) {
+                    cell.classList.add('today');
+                }
+                
+                cell.innerHTML = `<span class="day-number">${day}</span>`;
+                
+                if (taskCount > 0) {
+                    const dotsContainer = document.createElement('div');
+                    dotsContainer.className = 'task-dots-container'; // Added class for easier CSS styling
+                    // Replaced inline styles with a class/preferred style
+                    dotsContainer.style.marginTop = '0.5rem'; 
+                    
+                    const dayTasks = window.tasks.filter(t => !t.isCompleted && t.dueDate === dateString);
+                    
+                    // Filter unique tags for the dots (max 4 shown)
+                    const displayedTags = dayTasks
+                        .map(t => t.tag)
+                        .filter((value, index, self) => self.indexOf(value) === index) // Get unique tags
+                        .slice(0, 4);
+                    
+                    displayedTags.forEach(tag => {
+                        const tagDot = document.createElement('span');
+                        // Tag names must be lowercase for CSS classes
+                        const tagClass = tag.toLowerCase().replace(/[^a-z0-9]/g, ''); 
+                        tagDot.className = `task-dot tag-${tagClass}`;
+                        tagDot.title = tag;
+                        dotsContainer.appendChild(tagDot);
+                    });
+                    
+                    cell.appendChild(dotsContainer);
+                }
+
+                cell.addEventListener('click', () => {
+                    const allCells = grid.querySelectorAll('.day-cell');
+                    allCells.forEach(c => c.classList.remove('selected'));
+                    cell.classList.add('selected');
+                    renderSelectedDayTasks(cell.getAttribute('data-date'));
+                });
+
+                grid.appendChild(cell);
+            }
+
+            // Fill empty cells at the end
+            const totalCells = startDay + daysInMonth;
+            // We only need 42 cells total for a standard calendar (6 rows * 7 days).
+            // Calculate how many remaining cells are needed to fill the last row if totalCells > 35
+            const cellsInLastRow = totalCells % 7;
+            let endFillCount = 0;
+            
+            // Calculate how many cells are needed to finish the last row
+            if (cellsInLastRow !== 0) {
+                endFillCount = 7 - cellsInLastRow;
+            }
+            
+            // To ensure a minimum of 6 rows (42 cells total) if needed for layout consistency
+            if (totalCells + endFillCount < 42 && daysInMonth > 30) {
+                endFillCount += 7; // Add another full row
+            }
+            
+
+            for (let i = 0; i < endFillCount; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'day-cell other-month';
+                // const nextMonthDate = i + 1;
+                // emptyCell.innerHTML = `<span class="day-number">${nextMonthDate}</span>`;
+                grid.appendChild(emptyCell);
+            }
+        }
+
+        function renderSelectedDayTasks(date) {
+            const dateDisplay = document.getElementById('selected-date-display');
+            const listEl = document.getElementById('tasks-for-day');
+            
+            // Use the date string directly, it's safer for timezone issues than re-parsing a new Date()
+            const [year, month, day] = date.split('-');
+            const dateObj = new Date(year, month - 1, day); // month is 0-indexed in JS Date constructor
+
+            dateDisplay.textContent = dateObj.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+            const dayTasks = (window.tasks || []).filter(t => !t.isCompleted && t.dueDate === date);
+
+            listEl.innerHTML = '';
+
+            if (dayTasks.length === 0) {
+                listEl.innerHTML = `<li style="text-align: center; color: var(--color-gray-medium); padding: 1rem 0;">No pending tasks scheduled for this day.</li>`;
+                return;
+            }
+
+            dayTasks.forEach(task => {
+                const item = document.createElement('li');
+                item.className = 'task-entry';
+                
+                // Determine tag color class
+                const tagClass = task.tag.toLowerCase().replace(/[^a-z0-9]/g, '');
+                
+                item.innerHTML = `
+                    <div class="task-entry-title">
+                        <span class="tag-dot tag-${tagClass}"></span>
+                        ${task.title}
+                    </div>
+                    <span style="font-size: 0.8rem; color: var(--color-gray-medium);">${task.duration} min</span>
+                `;
+                listEl.appendChild(item);
+            });
+        }
+        
+        function changeMonth(delta) {
+            currentMonth += delta;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            } else if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            renderCalendar();
+        }
+
+        // --- INITIALIZATION FUNCTION ---
+        function initCalendar() {
+            // Find the earliest pending task to set the initial calendar view
+            const earliestTask = (window.tasks || [])
+                .filter(t => !t.isCompleted)
+                .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))[0];
+            
+            if (earliestTask) {
+                // Use the date string's components
+                const [y, m, d] = earliestTask.dueDate.split('-');
+                currentMonth = parseInt(m) - 1; // months are 0-indexed
+                currentYear = parseInt(y);
+            } else {
+                // Default to current month if no tasks exist
+                currentMonth = today.getMonth();
+                currentYear = today.getFullYear();
+            }
+            
+            renderCalendar();
+
+            // Attach navigation listeners
+            document.getElementById('prev-month').addEventListener('click', () => changeMonth(-1));
+            document.getElementById('next-month').addEventListener('click', () => changeMonth(1));
+        }
+        
+        // Wait for the DOM and the preceding scripts to load before initializing
+        document.addEventListener('DOMContentLoaded', initCalendar);
+
+    </script>
+</body>
+
+</html>
