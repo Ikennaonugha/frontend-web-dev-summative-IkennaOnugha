@@ -139,18 +139,3 @@ Escape
 Close any active modal dialog or the Add/Edit form panel.
 
 Modal/Form Views
-
-🧪 How to Run Tests
-
-This project includes a separate HTML file for basic assertions covering core logic.
-
-Clone the repository.
-
-Open the tests.html file directly in your web browser.
-
-The page will execute a small suite of self-contained JavaScript assertions (testing functions like regex validators, JSON parsing, and state initialization).
-
-View the console output to confirm all tests pass. This verifies the integrity of the data and validation layers.
-Email: 
-
-$$Your Email Address$$
