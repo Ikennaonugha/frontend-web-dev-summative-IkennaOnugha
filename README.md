@@ -1,6 +1,7 @@
 📚 Campus Life Planner
 
 The Campus Life Planner is a client-side application designed to help students manage their academic and extracurricular commitments. It allows users to track assignments, study sessions, meeting times, and personal goals, leveraging local storage for data persistence and advanced regular expressions for powerful search and data validation.
+Youtube video:https://youtu.be/TybM1cPdhF4
 
 ✨ Features
 
